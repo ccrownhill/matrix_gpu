@@ -1,4 +1,4 @@
-# nn_gpu - GPU+Compiler with Custom Linear Algebra Language for FPGA
+# matrix_gpu - GPU+Compiler with Custom Linear Algebra Language for FPGA
 
 ![logo](./logo.png)
 
