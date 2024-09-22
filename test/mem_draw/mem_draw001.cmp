@@ -1,0 +1,123 @@
+<32768,8>
+slli r5, %blockIdx, 3
+add r5, r5, %threadIdx
+andi r4, r5, 511
+cvtif r4, r4
+lui r6, 0x114b0
+fsub r4, r4, r6
+lui r6, 0xe712
+fmul r4, r4, r6
+lui r6, 0x30500
+fadd r4, r4, r6
+srli r6, r5, 9
+subi r6, r6, 512
+sub r6, r0, r6
+cvtif r6, r6
+lui r7, 0x114b0
+fsub r6, r6, r7
+lui r7, 0xe712
+fmul r6, r6, r7
+lui r7, 0x30500
+fadd r6, r6, r7
+fadd r6, r4, r6
+andi r4, r5, 511
+cvtif r4, r4
+lui r7, 0x114b0
+fsub r4, r4, r7
+lui r7, 0xe712
+fmul r4, r4, r7
+lui r7, 0x30500
+fadd r4, r4, r7
+srli r7, r5, 9
+subi r7, r7, 512
+sub r7, r0, r7
+cvtif r7, r7
+lui r8, 0x114b0
+fsub r7, r7, r8
+lui r8, 0xe712
+fmul r7, r7, r8
+lui r8, 0x30500
+fadd r7, r7, r8
+lui r8, 0x10500
+lui r9, 0x30500
+fslt r4, r8
+fslt.p r9, r4
+lui.p r8, 0x10500
+lui.p r9, 0x30500
+fslt.p r7, r8
+fslt.p r9, r7
+lui.p r8, 0x10500
+lui.p r9, 0x30500
+fslt.p r6, r8
+fslt.p r9, r6
+lui.p r10, 0xfc00
+fmul.p r8, r4, r10
+lui.p r11, 0x0
+fmul.p r10, r4, r11
+lui.p r11, 0xfc00
+fmul.p r9, r7, r11
+fadd.p r10, r10, r9
+lui.p r5, 0x20000
+fmul.p r11, r4, r5
+lui.p r5, 0xfc00
+fmul.p r9, r6, r5
+fadd.p r11, r11, r9
+addi r6, zero, 2
+addi.p r6, zero, 0
+addi r5, r11, 0
+lui r4, 0xfc00
+fdiv r4, r8, r4
+fabs r7, r10
+lui r9, 0xe87b
+fslt r7, r9
+lui.p r7, 0x20000
+fmul.p r4, r4, r7
+lui.p r7, 0xe87b
+fadd.p r4, r4, r7
+fslt.p r11, r4
+lui.p r5, 0x30500
+lui r9, 0xfc00
+fdiv r9, r10, r9
+fabs r7, r8
+lui r4, 0xe87b
+fslt r7, r4
+lui.p r7, 0x0
+fmul.p r9, r9, r7
+lui.p r7, 0xe87b
+fadd.p r9, r9, r7
+fslt.p r11, r9
+lui.p r5, 0x30500
+fabs r7, r8
+lui r9, 0xe87b
+fslt r7, r9
+fabs.p r7, r10
+lui.p r9, 0xe87b
+fslt.p r7, r9
+lui.p r5, 0x30500
+addi r11, r5, 0
+slti r6, 1
+lui.p r5, 0x30500
+fsub.p r11, r11, r5
+lui.p r5, 0xee66
+fmul.p r11, r11, r5
+lui.p r4, 0x30500
+fsub.p r8, r8, r4
+lui.p r4, 0x11086
+fmul.p r8, r8, r4
+lui.p r4, 0x114b0
+fadd.p r8, r8, r4
+lui.p r4, 0x30500
+fsub.p r10, r10, r4
+lui.p r4, 0x11086
+fmul.p r10, r10, r4
+lui.p r4, 0x114b0
+fadd.p r10, r10, r4
+cvtfi.p r8, r8
+cvtfi.p r10, r10
+subi.p r10, r10, 512
+sub.p r10, r0, r10
+slli.p r5, r10, 9
+add.p r5, r5, r8
+cvtfc.p r11, r11
+spix.p r11, r5
+exit

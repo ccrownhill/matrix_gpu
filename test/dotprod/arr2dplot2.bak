@@ -1,0 +1,83 @@
+<8192,8>
+addi r4, zero, 0x0
+disp r4
+disp r4
+disp r4
+andi r5, %blockIdx, 15
+slli r5, r5, 3
+add r5, r5, %threadIdx
+srli r6, %blockIdx, 4
+srli r6, r6, 8
+slli r6, r6, 1
+addi r7, r5, 0
+srli r7, r7, 8
+add r7, r7, r6
+addi r7, r7, 0
+lw r8, r7
+addi r7, r7, 8
+lw r7, r7
+slli r7, r7, 9
+add r8, r8, r7
+lui r9, 0xfc00
+fsub r8, r8, r9
+lui r9, 0xf555
+fmul r8, r8, r9
+lui r9, 0x0
+fadd r8, r8, r9
+cvtfc r8, r8
+disp r8
+addi r7, r5, 128
+srli r7, r7, 8
+add r7, r7, r6
+addi r7, r7, 0
+lw r8, r7
+addi r7, r7, 8
+lw r7, r7
+slli r7, r7, 9
+add r8, r8, r7
+lui r9, 0xfc00
+fsub r8, r8, r9
+lui r9, 0xf555
+fmul r8, r8, r9
+lui r9, 0x0
+fadd r8, r8, r9
+cvtfc r8, r8
+disp r8
+addi r7, r5, 256
+srli r7, r7, 8
+add r7, r7, r6
+addi r7, r7, 0
+lw r8, r7
+addi r7, r7, 8
+lw r7, r7
+slli r7, r7, 9
+add r8, r8, r7
+lui r9, 0xfc00
+fsub r8, r8, r9
+lui r9, 0xf555
+fmul r8, r8, r9
+lui r9, 0x0
+fadd r8, r8, r9
+cvtfc r8, r8
+disp r8
+addi r7, r5, 384
+srli r7, r7, 8
+add r7, r7, r6
+addi r7, r7, 0
+lw r8, r7
+addi r7, r7, 8
+lw r7, r7
+slli r7, r7, 9
+add r8, r8, r7
+lui r9, 0xfc00
+fsub r8, r8, r9
+lui r9, 0xf555
+fmul r8, r8, r9
+lui r9, 0x0
+fadd r8, r8, r9
+cvtfc r8, r8
+disp r8
+disp r4
+disp r4
+disp r4
+exit

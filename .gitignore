@@ -1,0 +1,9 @@
+*.DS_Store
+.vscode/
+**/bin
+**/build
+**/obj_dir/
+test_out
+**/*.vcd
+**/*.o
+.ipynb_checkpoints

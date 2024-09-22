@@ -1,0 +1,4 @@
+<16640,8>
+addi r4, zero, 0x0
+disp r4
+exit

@@ -1,0 +1,86 @@
+<64,8>
+srli r4, %blockIdx, 3
+slli r4, r4, 4
+andi r5, %blockIdx, 7
+add r4, r4, r5
+add r4, r4, %threadIdx
+addi r4, r4, 0
+# row1Reg: 5
+# col1Reg: 6
+# outValReg: 7
+# val1Reg: 8
+# val2Reg: 9
+lw r8, r4
+addi r10, r4, 8
+lw r10, r10
+slli r10, r10, 9
+add r8, r8, r10
+lui r11, 0x11640
+seqi %threadIdx, 0
+lui.p r10, 0x10900
+fdiv.p r11, r8, r10
+cvtfc r11, r11
+disp r11
+srli r5, %blockIdx, 3
+andi r6, %blockIdx, 7
+# outAddrReg: 4
+slli r4, r5, 4
+addi r4, r4, 0
+add r4, r4, %threadIdx
+addi r4, r4, 256
+lw r7, r4
+addi r10, r4, 8
+lw r10, r10
+slli r10, r10, 9
+add r7, r7, r10
+# addr2Reg: 10
+slli r10, r6, 4
+addi r10, r10, 0
+add r10, r10, %threadIdx
+addi r10, r10, 128
+lw r9, r10
+addi r11, r10, 8
+lw r11, r11
+slli r11, r11, 9
+add r9, r9, r11
+fmul r8, r8, r9
+fadd r7, r7, r8
+lui r7, 0x10500
+seqi %threadIdx, 0
+andi.p r10, r7, 511
+sw.p r10, r4
+srli.p r10, r7, 9
+addi.p r4, r4, 8
+sw.p r10, r4
+subi.p r4, r4, 8
+# outAddrReg: 4
+slli r4, r5, 4
+addi r4, r4, 1
+add r4, r4, %threadIdx
+addi r4, r4, 256
+lw r7, r4
+addi r10, r4, 8
+lw r10, r10
+slli r10, r10, 9
+add r7, r7, r10
+# addr2Reg: 10
+slli r10, r6, 4
+addi r10, r10, 1
+add r10, r10, %threadIdx
+addi r10, r10, 128
+lw r9, r10
+addi r11, r10, 8
+lw r11, r11
+slli r11, r11, 9
+add r9, r9, r11
+fmul r8, r8, r9
+fadd r7, r7, r8
+lui r7, 0x10500
+seqi %threadIdx, 0
+andi.p r10, r7, 511
+sw.p r10, r4
+srli.p r10, r7, 9
+addi.p r4, r4, 8
+sw.p r10, r4
+subi.p r4, r4, 8
+exit

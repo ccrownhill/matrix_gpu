@@ -1,0 +1,85 @@
+<1,8>
+addi r4, zero, 0x0
+addi r5, zero, 2
+addi.p r5, zero, 0
+seqi %threadIdx, 0
+lui.p r6, 0xf266
+andi.p r7, r6, 511
+sw.p r7, r4
+srli.p r7, r6, 9
+addi.p r4, r4, 8
+sw.p r7, r4
+subi.p r4, r4, 7
+lui.p r6, 0xf666
+andi.p r7, r6, 511
+sw.p r7, r4
+srli.p r7, r6, 9
+addi.p r4, r4, 8
+sw.p r7, r4
+subi.p r4, r4, 7
+addi.p r7, zero, 0
+sw.p r7, r4
+addi.p r4, r4, 8
+sw.p r7, r4
+subi.p r4, r4, 7
+sw.p r7, r4
+addi.p r4, r4, 8
+sw.p r7, r4
+subi.p r4, r4, 7
+sw.p r7, r4
+addi.p r4, r4, 8
+sw.p r7, r4
+subi.p r4, r4, 7
+sw.p r7, r4
+addi.p r4, r4, 8
+sw.p r7, r4
+subi.p r4, r4, 7
+sw.p r7, r4
+addi.p r4, r4, 8
+sw.p r7, r4
+subi.p r4, r4, 7
+sw.p r7, r4
+addi.p r4, r4, 8
+sw.p r7, r4
+subi.p r4, r4, 7
+lui.p r6, 0xf8cd
+andi.p r7, r6, 511
+sw.p r7, r4
+srli.p r7, r6, 9
+addi.p r4, r4, 8
+sw.p r7, r4
+subi.p r4, r4, 7
+lui.p r6, 0xfa66
+andi.p r7, r6, 511
+sw.p r7, r4
+srli.p r7, r6, 9
+addi.p r4, r4, 8
+sw.p r7, r4
+subi.p r4, r4, 7
+addi.p r7, zero, 0
+sw.p r7, r4
+addi.p r4, r4, 8
+sw.p r7, r4
+subi.p r4, r4, 7
+sw.p r7, r4
+addi.p r4, r4, 8
+sw.p r7, r4
+subi.p r4, r4, 7
+sw.p r7, r4
+addi.p r4, r4, 8
+sw.p r7, r4
+subi.p r4, r4, 7
+sw.p r7, r4
+addi.p r4, r4, 8
+sw.p r7, r4
+subi.p r4, r4, 7
+sw.p r7, r4
+addi.p r4, r4, 8
+sw.p r7, r4
+subi.p r4, r4, 7
+sw.p r7, r4
+addi.p r4, r4, 8
+sw.p r7, r4
+subi.p r4, r4, 7
+slti r5, 1
+exit

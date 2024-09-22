@@ -1,0 +1,207 @@
+#include <iostream>
+{{ if .img_out }}
+#include <filesystem>
+#include <string>
+#include <sstream>
+#include <fstream>
+#include <array>
+{{ end }}
+
+#include "verilated.h"
+#include "verilated_vcd_c.h"
+#include "V{{ .module }}.h"
+#include "V{{ .module }}___024root.h"
+
+#define MAX_SIM_CYC {{ .cycles }}
+{{ if .img_out }}
+#define PATH "./img"
+#define HEIGHT {{ .height }}
+#define WIDTH {{ .width }}
+#define BLOCK_DIM {{ .block_dim }}
+
+{{ end }}
+
+int main(int argc, char *argv[]) {
+    int simcyc, tick;
+
+    {{ if .img_out }}
+    int frametrack = 0;
+    std::filesystem::path p {PATH};
+    if (std::filesystem::exists(p)) {
+        std::filesystem::remove_all(p);
+    }
+    std::filesystem::create_directory(p);
+    {{ end }}
+
+
+    Verilated::commandArgs(argc, argv);
+    V{{ .module }} *top = new V{{ .module }};
+    Verilated::traceEverOn(true);
+
+    {{ if .vcd_out }}
+    VerilatedVcdC *tfp = new VerilatedVcdC;
+    top->trace(tfp, 99);
+    tfp->open("{{ .module }}.vcd");
+    {{ end }}
+
+    {{ if .is_clocked }}
+    top->clk = 1;
+    {{ end }}
+
+    {{ if .img_out }}
+    std::array<std::array<int, WIDTH>, HEIGHT> frame;
+    {{ end }}
+
+    {{ if .is_clocked }}
+	{{ if (and .img_out (le .cycles 0)) }}
+    for (simcyc = 0; frametrack < WIDTH * HEIGHT; simcyc++) {
+	{{ else }}
+    for (simcyc = 0; simcyc < MAX_SIM_CYC; simcyc++) {
+	{{ end }}
+        {{ range .inputs }}
+        {{ if (eq (len .cycle) 2) }}
+        if (simcyc >= {{ index .cycle 0 }} && simcyc <= {{ index .cycle 1 }}) {
+        {{ else }}
+        if (simcyc == {{ index .cycle 0 }}) {
+        {{ end }}
+
+            top->{{ .name | replaceDots $.module }} = {{ .val }};
+        }
+        {{ end }}
+
+        for (tick = 0; tick < 2; tick++) {
+            {{ if .vcd_out }}
+            tfp->dump(2*simcyc + tick);
+            {{ end }}
+            top->clk = !top->clk;
+            top->eval();
+        }
+
+        {{ range .outputs }}
+
+        {{ if (eq (len .cycle) 2) }}
+        if (simcyc >= {{ index .cycle 0 }} && simcyc <= {{ index .cycle 1 }}) {
+        {{ else }}
+        if (simcyc == {{ index .cycle 0 }}) {
+        {{ end }}
+
+            if (top->{{ .name | replaceDots $.module }} != {{ .val }}) {
+                std::cerr << "Incorrect val of '{{ .name }}' in cycle " << simcyc <<
+                    ":\n\tgot " << top->{{ .name | replaceDots $.module }} << " want {{ .val }}\n";
+                {{ if .vcd_out }}
+                tfp->close();
+                {{ end }}
+
+                exit(1);
+            }
+        }
+        {{ end }}
+
+        {{ if .img_out }}
+        if (top->{{ .col_valid }} != 0) {
+            {{ if (eq .block_dim 1) }}
+            frame[frametrack/WIDTH][frametrack%WIDTH] = top->{{ .col_out }};
+            frametrack++;
+            {{ else if (eq .block_dim 2) }}
+            frame[frametrack/WIDTH][frametrack%WIDTH] = top->{{ .col_out }} & 0xffffff;
+            frametrack++;
+            frame[frametrack/WIDTH][frametrack%WIDTH] = top->{{ .col_out }} >> 24;
+            frametrack++;
+            {{ else }}
+            for (int i = 0; i < BLOCK_DIM; i++) {
+				int idx = (i * 24) / 32;
+				int offset = (i * 24) % 32;
+				frame[frametrack/WIDTH][frametrack%WIDTH] =
+					(top->{{ .col_out }}[idx] & (((1 << 24) - 1) << offset)) >> offset;
+				if (offset > 8) {
+					frame[frametrack/WIDTH][frametrack%WIDTH] +=
+						(top->{{ .col_out }}[idx + 1]
+							& ((1 << (24 - (32 - offset))) - 1))
+						<< (32 - offset);
+				}
+
+                frametrack++;
+            }
+            {{ end }}
+        }
+        {{ end }}
+
+        if (Verilated::gotFinish()) {
+            {{ if .vcd_out }}
+            tfp->close();
+            {{ end }}
+
+            exit(0);
+        }
+    }
+
+    {{ if .img_out }}
+    std::ostringstream outf;
+	outf << PATH << "/" << simcyc << ".ppm";
+
+	std::string outfile = outf.str();
+	std::cout << "output file name: " << outfile << std::endl;
+
+	//std::ofstream outstream {outfile, std::ios::out | std::ios::binary};
+	std::ofstream outstream {outfile};
+
+    outstream << "P3\n" << WIDTH << " " << HEIGHT << "\n255\n";
+	for (int i = 0; i < HEIGHT; i++) {
+		for (int j = 0; j < WIDTH; j++) {
+            outstream << ((frame[i][j] >> 16) & 255) << " ";
+            outstream << ((frame[i][j] >> 8) & 255) << " ";
+            outstream << ((frame[i][j]) & 255) << " ";
+			if (j != WIDTH-1) {
+				outstream << " ";
+			}
+            if (j % 8 == 0) {
+                outstream << "\n";
+            }
+		}
+		if (i != HEIGHT-1) {
+			outstream << "\n";
+		}
+	}
+    for (int i = 0; i < 30000; i ++){
+        outstream << "0 0 0";
+        if (i % 20 == 0) {
+            outstream << "\n";
+        }
+    }
+    {{ end }}
+
+
+    {{ else }}
+	// not clocked
+
+    {{ range .inputs }}
+    top->{{ .name }} = {{ .val }};
+    {{ end }}
+
+    {{ if .vcd_out }}
+    tfp->dump(0);
+    {{ end }}
+    top->eval();
+    {{ if .vcd_out }}
+    tfp->dump(1);
+    {{ end }}
+
+    {{ range .outputs }}
+    if (top->{{ .name }} != {{ .val }}) {
+        std::cerr << "Incorrect val of '{{ .name }}':\n\tgot "
+            << top->{{ .name }} << " want {{ .val }}\n";
+        {{ if .vcd_out }}
+        tfp->close();
+        {{ end }}
+        exit(1);
+    }
+    {{ end }}
+
+    {{ end }}
+
+    {{ if .vcd_out }}
+    tfp->close();
+    {{ end }}
+
+    exit(0);
+}

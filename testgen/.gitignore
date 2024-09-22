@@ -1,0 +1,7 @@
+*.cpp
+*.sh
+obj_dir
+*.vcd
+*.asm
+*.mem
+assembler

@@ -1,0 +1,14 @@
+#!/bin/sh
+
+set -e
+
+rm -rf obj_dir
+rm -f *.vcd
+
+verilator -Wall -I{{ .src_path }} --cc --trace {{ .src_path }}/pkg/* {{ .src_path }}/{{ .module }}.sv --top-module {{.module}} --exe {{ .module }}_tb.cpp || true
+
+make -j -C obj_dir/ -f V{{ .module }}.mk V{{ .module }}
+
+echo "Simulating..."
+obj_dir/V{{ .module }}
+echo "Simulation complete..."

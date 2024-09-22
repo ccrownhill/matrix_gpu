@@ -1,0 +1,22 @@
+module: "simd_processor"
+src_path: "../../rtl"
+is_clocked: true
+  #cycles: 26106667
+  #cycles: 3307729
+cycles: 0
+inputs:
+  - name: "vdma_ready"
+    cycle:
+    - 0
+    val: 1
+
+block_dim: 8
+height: 720
+width: 1280
+vcd_out: false
+img_out: true
+col_out: "rgb_out"
+col_valid: "disp_valid_out"
+asm_dir: "../../assembler"
+asm_basename: "mem_draw"
+is_3d: false
